@@ -3,9 +3,10 @@
  */
 
 var layer = layui.layer,
-    element = layui.element(),
-    laydate = layui.laydate,
-    form = layui.form();
+    element = layui.element;
+    laydate = layui.laydate;
+    form = layui.form;
+    upload = layui.upload;
 
 /**
  * AJAX全局设置
@@ -24,18 +25,22 @@ $('.layui-nav-tree').find('a[href*="' + GV.current_controller + '"]').parent().a
 /**
  * 通用单图上传
  */
-layui.upload({
+upload.render({
+    elem: '.layui-update_btn',
     url: "/index.php/api/upload/upload",
-    type: 'image',
-    ext: 'jpg|png|gif|bmp',
-    success: function (data) {
-        if (data.error === 0) {
-            document.getElementById('thumb').value = data.url;
+    accept: 'image',
+    ext: 'jpg|png|gif|jpeg',
+    done: function(res, index, upload){ //上传后的回调
+        if (res.error === 0) {
+            document.getElementById('thumb').value = res.url;
         } else {
             layer.msg(data.message);
         }
     }
-});
+    //,accept: 'file' //允许上传的文件类型
+    //,size: 50 //最大允许上传的文件大小
+    //,……
+})
 
 /**
  * 通用日期时间选择
